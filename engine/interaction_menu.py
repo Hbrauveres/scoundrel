@@ -1,31 +1,32 @@
+from engine.menu_option import MenuOption
+
+
 class InteractionMenu:
   def __init__(self, dungeon_room, player):
     self.dungeon_room = dungeon_room
     self.player = player
+    self.menu_options = []
   
-  def AttackDialog(self, card):
+  def attack_dialog_callback(self, card):
     pass
   
-  def UsePotionDialog(self, card):
+  def use_potion_dialog_callback(self, card):
     pass
   
-  def AreYouSureDialog(self, card):
+  def confirm_dialog_callback(self, card):
     pass
   
-  def DisplayPlayerOptions(self):
+  def display_player_options(self):
+    self.reset_menu_options()
+    
     for index, card in enumerate(self.dungeon_room.room_slots):
-      match card.type:
-        case "Monster":
-          print(f"[{index+1}] Attack monster {card.format_card()}")
-        
-        case "Potion":
-          print(f"[{index+1}] Use Potion {card.format_card()}")
-        
-        case "Weapon":
-          print(f"[{index+1}] Equip Weapon {card.format_card()}")
+      self.menu_options.append(MenuOption(index+1, card))
           
     self.get_player_answer()
-    
+  
+  def reset_menu_options(self):
+    self.menu_options = []
+  
   def get_player_answer(self):
     answer = int(input("> "))-1
     #fazer tratamento do input

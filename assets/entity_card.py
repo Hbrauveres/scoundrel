@@ -1,9 +1,10 @@
 from engine.card import Card
 
 class EntityCard(Card):
-  def __init__(self, id, value, suit, type):
+  def __init__(self, id, value, suit, type, action):
     super().__init__(id, value, suit)
     
+    self.action = action
     self.type = type
     self.effective_value = self.parse_effective_value(value)
 
