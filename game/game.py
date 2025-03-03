@@ -1,4 +1,3 @@
-# game.py
 from game.assets.scoundrel_deck import ScoundrelDeck
 from game.assets.dungeon_room import DungeonRoom
 from game.assets.player import Player
