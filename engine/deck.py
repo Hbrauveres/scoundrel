@@ -30,7 +30,7 @@ class Deck:
         random.shuffle(self.cards)
     
     def draw_card(self):
-        return self.cards.pop() if self.cards else None
+        return self.cards.pop(0) if self.cards else None
       
     def place_on_the_bottom(self, card):
       self.cards.append(card)

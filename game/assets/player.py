@@ -6,22 +6,23 @@ class Player:
     self.weapon = None
     
   def attack(self, card, armed):
-    pass
+    if armed:
+      self.health = self.health + self.weapon.effective_value - card.effective_value
+      return 
+    
+    self.health = self.health - card.effective_value
   
   def consume(self, card):
-    pass
+    S = self.health + card.effective_value
+    M = MAX_PLAYER_HEALTH
+    
+    self.health = (S + M - abs(S - M)) / 2    
   
   def equip(self, card):
-    pass
-      
-  def lose_health(self, value):
-    pass
-  
-  def gain_health(self, value):
-    pass
+    self.weapon = card
   
   def is_alive(self):
-    return self.health >= MAX_PLAYER_HEALTH
+    return self.health > 0
   
   def format_player(self):
     player_status = f"Health: {self.format_health()}\nCurrent Weapon: "

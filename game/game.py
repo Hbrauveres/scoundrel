@@ -33,6 +33,7 @@ class Game:
 
     def process_action(self, action):
       action.callback()
+      self.dungeon_room.remove_card(action.card)
 
     def has_save(self):
         return False

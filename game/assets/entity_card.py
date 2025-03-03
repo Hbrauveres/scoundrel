@@ -7,7 +7,7 @@ class EntityCard(Card):
     
     self.type = type
     self.action_text = ACTION_MESSAGE_BY_TYPE[type]
-    self.effective_value = self.get_effective_value(value)
+    self.effective_value = int(self.get_effective_value(value))
 
   def get_effective_value(self, value):
     values = {'A': 14, 'K': 12, 'Q': 11, 'J': 10}

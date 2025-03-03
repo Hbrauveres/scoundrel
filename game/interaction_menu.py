@@ -33,6 +33,11 @@ class InteractionMenu:
   def set_menu_options(self):
     callback_fn = None
     
+    if self.dungeon_room.room_slots == []:
+      self.handle_end_turn()
+      
+      return
+    
     for index, card in enumerate(self.dungeon_room.room_slots):
       match card.type:
         case constants.MONSTER:
@@ -44,23 +49,30 @@ class InteractionMenu:
         case constants.WEAPON:
           callback_fn = self.handle_equip
 
-      self.menu_options[index+1] = MenuOption(index+1, card.action_text + " " + card.format_card(), callback_fn)
+      self.menu_options[index+1] = MenuOption(index+1, card.action_text + " " + card.format_card(), card, callback_fn)
       
-    if self.dungeon_room.can_skip and self.dungeon_room.filled_slots() == 4:
-      self.menu_options[len(self.menu_options)+1] = MenuOption(len(self.menu_options)+1, "Skip room (Send all cards to deck's bottom)", self.handle_skip_room)
+    if not self.dungeon_room.just_skipped and self.dungeon_room.filled_slots() == 4:
+      self.menu_options[len(self.menu_options)+1] = MenuOption(len(self.menu_options)+1, "Skip room (Send all cards to deck's bottom)", None, self.handle_skip_room)
     
     if self.dungeon_room.filled_slots() < 4:
-      self.menu_options[len(self.menu_options)+1] = MenuOption(len(self.menu_options)+1, "End Turn", self.handle_end_turn)
+      self.menu_options[len(self.menu_options)+1] = MenuOption(len(self.menu_options)+1, "End Turn", None, self.handle_end_turn)
   
   def clear_menu_options(self):
     self.menu_options = {}
     self.selected_card = None
   
   def get_player_action(self):
-    user_input = int(input("> "))
+    user_input = input("> ")
     
-    if user_input in self.menu_options.keys():
-      return self.menu_options[user_input]
+    if user_input.isdigit():
+      user_input = int(user_input)
+      
+      if user_input in self.menu_options.keys():
+        
+        action = self.menu_options[user_input]
+        self.selected_card = action.card
+        
+        return action
     
     print("Invalid option")
     return None
@@ -69,25 +81,27 @@ class InteractionMenu:
     print('----------------------------------')
     
     if not self.player.weapon:
-      self.player.attack(self.selected_card, choice)
+      self.player.attack(self.selected_card, False)
       
       return
       
     choice = input("Do you want to use your weapon? y/n\n> ")
     
     if choice.lower() in ("y", "n"):
-        self.player.attack(self.selected_card, choice)
+        self.player.attack(self.selected_card, constants.CHAR_TO_BOOL[choice])
     else:
         print("Opção de ataque inválida!")
 
   def handle_equip(self):
-    self.player.equip_weapon(self.selected_card)
+    self.player.equip(self.selected_card)
 
   def handle_potion(self):
-    self.player.heal(self.selected_card)
+    self.player.consume(self.selected_card)
           
   def handle_skip_room(self):
-    pass
+    self.dungeon_room.skip_room()
+    self.turn_finished = True
   
   def handle_end_turn(self):
     self.turn_finished = True
+    self.dungeon_room.just_skipped = False
