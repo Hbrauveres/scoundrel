@@ -4,27 +4,15 @@ class Player:
   def __init__(self):
     self.health = MAX_PLAYER_HEALTH
     self.weapon = None
-    self.discard_pile = []
     
-  def attack(self, card):
-    print("ATAQUE")
+  def attack(self, card, armed):
+    pass
   
-  def equip_weapon(self, card):
-    print("EQUIPA")
+  def consume(self, card):
+    pass
   
-  def use_potion(self, card):
-    print("POCAO")
-  
-  def interact(self, card):
-    match card.type:
-      case "Monster":
-        self.attack(card)
-      
-      case "Potion":
-        self.use_potion(card)
-      
-      case "Weapon":
-        self.equip_weapon(card)
+  def equip(self, card):
+    pass
       
   def lose_health(self, value):
     pass

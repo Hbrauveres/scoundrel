@@ -3,17 +3,19 @@ from constants.constants import MAX_ROOM_SLOTS
 class DungeonRoom:
   def __init__(self, deck):
     self.deck = deck
+    self.can_skip = True
     self.room_slots = []
-    self.used_slots = len(self.room_slots)
     
+  def filled_slots(self):
+    return len(self.room_slots)  
+  
   def draw_room(self):
     if not self.can_draw_room(): return
     
-    empty_rooms = MAX_ROOM_SLOTS - self.used_slots
+    empty_rooms = MAX_ROOM_SLOTS - self.filled_slots()
     
     for _ in range(empty_rooms):
       self.room_slots.append(self.deck.draw_card())
-    
   
   def skip_room(self):
     for _ in self.room_slots:
