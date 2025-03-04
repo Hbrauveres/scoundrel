@@ -29,10 +29,13 @@ class Game:
           
           if action and self.interaction_menu.confirm_action(action):
             self.process_action(action)
+      
+      self.current_turn += 1
 
     def process_action(self, action):
       action.callback()
       self.dungeon_room.remove_card(action.card)
+      self.interaction_menu.check_for_auto_end_turn()
 
     def has_save(self):
         return False
@@ -40,7 +43,7 @@ class Game:
     def display_game_state(self):
         self.clear_terminal()
         
-        print('----------------------------------')
+        print(f'--------- Dungeon Room: {self.current_turn} --------')
         print(self.player.format_player())
         print('----------------------------------')
         print(self.dungeon_room.format_room())

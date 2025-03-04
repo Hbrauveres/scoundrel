@@ -30,13 +30,14 @@ class InteractionMenu:
     
     return "\n".join(action_options)
   
-  def set_menu_options(self):
-    callback_fn = None
-    
-    if self.dungeon_room.room_slots == []:
-      self.handle_end_turn()
+  def check_for_auto_end_turn(self):
+     if self.dungeon_room.room_slots == []:
+      self.turn_finished = True
       
       return
+  
+  def set_menu_options(self):
+    callback_fn = None
     
     for index, card in enumerate(self.dungeon_room.room_slots):
       match card.type:
@@ -80,11 +81,13 @@ class InteractionMenu:
   def handle_attack(self):
     print('----------------------------------')
     
-    if not self.player.weapon:
+    can_use_weapon = self.player.can_attack_with_weapon(self.selected_card)
+    
+    if not self.player.weapon or not can_use_weapon:
       self.player.attack(self.selected_card, False)
       
       return
-      
+    
     choice = input("Do you want to use your weapon? y/n\n> ")
     
     if choice.lower() in ("y", "n"):
