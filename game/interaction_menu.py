@@ -1,3 +1,4 @@
+import os
 from constants import constants
 from game.menu_option import MenuOption
 
@@ -11,12 +12,15 @@ class InteractionMenu:
     self.turn_finished = False
   
   def end_game(self, status):
+    self.clear_terminal()
+    print('----------------------------------')
     match status:
       case "Defeat":
-        print("Deu ruim")
+        print("You are dead")
         
       case "Victory":
-        print("Deu bom")
+        print("Congratulations you defeated the dungeon")
+    print('----------------------------------')
   
   def confirm_action(self, action):
     choice = input(f"Confirm: [{action.text}] y/n\n> ")
@@ -116,3 +120,6 @@ class InteractionMenu:
   def handle_end_turn(self):
     self.turn_finished = True
     self.dungeon_room.just_skipped = False
+    
+  def clear_terminal(self):
+      os.system("cls" if os.name == "nt" else "clear")
