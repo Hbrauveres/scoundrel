@@ -36,9 +36,23 @@ class Game:
       action.callback()
       self.dungeon_room.remove_card(action.card)
       self.interaction_menu.check_for_auto_end_turn()
+      self.check_end_game()
 
     def has_save(self):
         return False
+
+    def check_end_game(self):
+      if self.player.is_alive() and self.deck != []:
+        return
+      
+      end_game_status = "Victory"
+      
+      if not self.player.is_alive():
+        end_game_status = "Defeat"
+
+      self.interaction_menu.end_game(end_game_status)
+      self.interaction_menu.turn_finished = True
+      self.is_running = False
 
     def display_game_state(self):
         self.clear_terminal()

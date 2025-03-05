@@ -10,6 +10,14 @@ class InteractionMenu:
     self.qty_menu_options = 0
     self.turn_finished = False
   
+  def end_game(self, status):
+    match status:
+      case "Defeat":
+        print("Deu ruim")
+        
+      case "Victory":
+        print("Deu bom")
+  
   def confirm_action(self, action):
     choice = input(f"Confirm: [{action.text}] y/n\n> ")
     
